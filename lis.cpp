@@ -35,11 +35,6 @@ int lis(vector<int>& v)
 	return max; 
 }
 
-int lis_rec(std::vector<int>& v)
-{
-
-}
-
 int main()
 {
 	std::vector<int> v = {10, 22, 9, 33, 21, 50, 41, 60};
@@ -50,14 +45,9 @@ int main()
 	}
 	cout << endl;
 
-
 	int result = lis(v);
 
-	cout << "LIS: " << result << endl;
-
-	result = lis_rec(v);
-
-	cout << "LIS REC : " << result << endl;  
+	cout << "LIS: " << result << endl; 
 	
 	return 0;
 }
