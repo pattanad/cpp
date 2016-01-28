@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cstdlib>
 
 #include "bst.h"
 
@@ -95,6 +96,41 @@ void BST::postorder(Node* node)
 	cout << node->data << endl; 
 }
 
+bool BST::isBalanced()
+{
+	int height; 
+	isBalanced(root, height);
+}
+
+bool BST::isBalanced(Node* node, int& height)
+{
+	if (node == nullptr)
+	{
+		height = 0;
+		return true;  
+	}
+
+	int l_height, r_height; 
+
+	if (isBalanced(node->left, l_height) && isBalanced(node->right, r_height))
+	{
+		height = max(l_height, r_height) + 1;
+
+		if (abs(l_height - r_height) > 1)
+		{
+			return false;
+		}
+		else 
+		{ 
+			return true;
+		} 
+	}
+	else
+	{
+		return false; 
+	}
+}
+
 int main()
 {
     cout << "it works" << endl;
@@ -115,6 +151,8 @@ int main()
     bst.insert(6);
     bst.insert(8);
     bst.insert(1);
+    bst.insert(9);
+    bst.insert(10);
 
     cout << "BST Inorder" << endl; 
     bst.inorder();
@@ -124,6 +162,16 @@ int main()
 
     cout << "BST Postorder" << endl; 
     bst.postorder();
+
+    cout << "BST Balance computation" << endl; 
+    if (bst.isBalanced())
+    {
+    	cout << "BST is balanced" << endl; 
+    }
+    else
+    {
+    	cout << "BST is not balanced" << endl;
+    }
 
     return 0;
 }

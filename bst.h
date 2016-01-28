@@ -26,12 +26,14 @@ public:
 	void inorder(); 
 	void preorder();
 	void postorder();
+	bool isBalanced();
 
 protected:
 	Node* insert(int data, Node* node, Node* parent);
 	void inorder(Node* node); 
 	void preorder(Node* node);
 	void postorder(Node* node);
+	bool isBalanced(Node* node, int& height);
 	 
 private: 
 	Node* root; 
