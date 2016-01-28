@@ -133,7 +133,7 @@ public:
 		}
 	}
 
-protected:
+protected: 
 	bool addEdge(EDGE& e)
 	{
 		Node* v1 = getNode(e.first); 
