@@ -131,6 +131,19 @@ bool BST::isBalanced(Node* node, int& height)
 	}
 }
 
+void createBinTree(std::vector<int>& v, int start, int end, BST& bst)
+{
+	if (start > end)
+	{
+		return; 
+	}
+
+	int mid = (start + end)/2; 
+	bst.insert(v[mid]); 
+	createBinTree(v, start, mid-1, bst); 
+	createBinTree(v, mid+1, end, bst);
+}
+
 int main()
 {
     cout << "it works" << endl;
@@ -171,6 +184,28 @@ int main()
     else
     {
     	cout << "BST is not balanced" << endl;
+    }
+
+    std::vector<int> v = {1,2,3,4,5,6,7,8,9,10};
+
+    for (auto i : v)
+    {
+    	cout << i << " "; 
+    }
+    cout << endl; 
+
+    BST btree;
+    createBinTree(v, 0, v.size() - 1, btree);
+
+    btree.inorder(); 
+
+    if(btree.isBalanced())
+    {
+    	cout << "Tree is balanced" << endl; 
+    }
+    else 
+    {
+    	cout << "Tree is not balanced" << endl; 
     }
 
     return 0;
