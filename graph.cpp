@@ -133,6 +133,46 @@ public:
 		}
 	}
 
+	bool pathBetweenTwoNodes(int d1, int d2)
+	{
+		Node* node1 = getNode(d1); 
+		Node* node2 = getNode(d2);
+
+		return pathBetweenTwoNodes(node1, node2);
+	}
+
+/* Performing BFS in the graph starting node1 to find node2. */
+	bool pathBetweenTwoNodes(Node* node1, Node* node2)
+	{
+		queue<Node*> my_queue; 
+
+		node1->visited = VISITED; 
+
+		my_queue.push(node1); 
+
+		while (!my_queue.empty())
+		{
+			Node* n = my_queue.front();
+			my_queue.pop();
+
+			if (n->data == node2->data)
+			{
+				cout << "Path exists between the nodes " << node1->data << " and " << node2->data << endl; 
+				return true; 
+			}
+			n->visited = VISITED; 
+
+			for (auto v : n->neighbors)
+			{
+				if (v->visited == NOT_VISITED)
+				{
+					my_queue.push(v);
+				}
+			}
+		}
+		return false; 
+	}
+
 protected: 
 	bool addEdge(EDGE& e)
 	{
@@ -193,7 +233,19 @@ int main()
 	g.BFS(1); 
 
 	g.reset();
-	g.DFS(); 
+
+	g.DFS();
+
+	g.reset(); 
+
+	if (g.pathBetweenTwoNodes(1,2))
+	{
+		cout << "Path between nodes 1 and 2 exist" << endl; 
+	} 
+	else 
+	{
+		cout << "Path does not exist" << endl; 
+	}
 
 	return 0; 
 }
