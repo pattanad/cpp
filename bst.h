@@ -46,6 +46,7 @@ public:
 	void postorder();
 	bool isBalanced();
 	void createLinkedListAtEachDepth(std::vector<std::vector<int>>& lists);
+	int inOrderSuccessor(int data); 
 
 protected:
 	Node* insert(int data, Node* node, Node* parent);
@@ -54,6 +55,8 @@ protected:
 	void postorder(Node* node);
 	bool isBalanced(Node* node, int& height);
 	void createLinkedListAtEachDepth(Node* node, std::vector<std::vector<int>>& lists, int level);
+	Node*  getNode(int data, Node* node);
+	Node* getMinNode(Node* node);  
 };
 
 

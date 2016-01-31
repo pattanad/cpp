@@ -231,6 +231,79 @@ void BST::createLinkedListAtEachDepth(vector<vector<int>>& lists)
 	createLinkedListAtEachDepth(root, lists, level); 
 }
 
+Node* BST::getNode(int data, Node* node)
+{
+	if (node == nullptr)
+	{
+		return nullptr;
+	} 
+
+	if (data == node->data)
+	{
+		return node;
+	}
+
+	else if (data > node->data)
+	{
+		return getNode(data, node->right);
+	}
+	else 
+	{
+		return getNode(data, node->left); 
+	}
+}
+
+Node* BST::getMinNode(Node* node)
+{
+	if (node != nullptr)
+	{
+		while (node->left != nullptr)
+		{
+			node = node->left; 
+		}
+		return node; 
+	}
+	return nullptr; 
+}
+
+int BST::inOrderSuccessor(int data)
+{
+	Node* node = getNode(data, root); 
+
+	if (node != nullptr)
+	{
+		// Node found. Process the inorder. 
+		if (node->right != nullptr)
+		{
+			Node* minNode = getMinNode(node->right);
+			return minNode->data; 
+		}
+		else 
+		{
+			// The successor will be one of the parents as the right subtree does not exist. 
+			Node* parent = node->parent; 
+			while (parent != nullptr && node != node->parent->left)
+			{
+				node = parent; 
+				parent = node->parent; 
+			}
+
+			if (parent != nullptr)
+			{
+				return parent->data;
+			}
+			else 
+			{
+				return -1; // this is supposed to be the error code. 
+			}
+		}
+	}
+	else 
+	{
+		return -1; 
+	}
+}
+
 void createBalancedBinTree(std::vector<int>& v, int start, int end, BST& bst)
 {
 	if (start > end)
@@ -355,7 +428,14 @@ int main()
     {
     	cout << "This is not a BST" << endl; 
     }
-     cout << "Is binary tree a binarry search tree ? -- END" << endl; 
+    cout << "Is binary tree a binarry search tree ? -- END" << endl; 
+
+    cout << "Inorder successor in a BST -- BEGIN" << endl; 
+    int num = 10; 
+    cout << "Inorder successor of " << num << " is : " << bst.inOrderSuccessor(num) << endl; 
+
+    cout << "Inorder successor in a BST -- END" << endl; 
+
 
     return 0;
 }
