@@ -304,6 +304,55 @@ int BST::inOrderSuccessor(int data)
 	}
 }
 
+bool BST::contains(Node* node1, Node* node2)
+{
+	if (node1 == nullptr || node2 == nullptr)
+	{
+		return false; 
+	}
+
+	if (node1->data == node2->data)
+	{
+		return true; 
+	}
+
+	return contains(node1->left, node2) || contains(node1->right, node2); 
+}
+
+int BST::lca(int data1, int data2)
+{
+	Node* node1 = getNode(data1, root); 
+	Node* node2 = getNode(data2, root); 
+
+	if (node1 == nullptr || node2 == nullptr)
+	{
+		return -1; 
+	}
+
+	if (node1 == root) 
+	{
+		return node1->data; 
+	}
+	if (node2 == root)
+	{
+		return node2->data;
+	}
+
+	while (node1 != nullptr)
+	{
+		if (contains(node1, node2))
+		{
+			cout << node1->data << " contains " << node2->data << endl; 
+			return node1->data; 
+		}
+		else
+		{
+			node1 = node1->parent; 
+		}
+	}
+	return -1; 
+}
+
 void createBalancedBinTree(std::vector<int>& v, int start, int end, BST& bst)
 {
 	if (start > end)
@@ -434,8 +483,15 @@ int main()
     int num = 10; 
     cout << "Inorder successor of " << num << " is : " << bst.inOrderSuccessor(num) << endl; 
 
-    cout << "Inorder successor in a BST -- END" << endl; 
+    cout << "Inorder successor in a BST -- END" << endl;
 
+    cout << "Lowest common ancestor computation -- BEGIN" << endl; 
+
+    int data1 = 5, data2 = 11; 
+    int data = bst.lca(data1, data2);  
+    cout << "LCA of " << data1 << " and " << data2 << " is " << data << endl; 
+
+    cout << "Lowest common ancestor computation -- END" << endl; 
 
     return 0;
 }
