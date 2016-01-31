@@ -1,6 +1,7 @@
 #ifndef _BST_H_
 #define _BST_H_
 #include <iostream>
+#include <vector>
 
 class Node
 {
@@ -17,7 +18,24 @@ public:
 	Node* parent;  
 };
 
-class BST
+class BT
+{
+public: 
+	BT(); 
+	~BT(); 
+	virtual bool isBST(); 
+
+	void setRoot(int data); 
+	Node* getRoot(); 
+
+protected: 
+	bool isBST(Node* root, int min, int max); 
+
+protected:  
+	Node* root; 
+};
+
+class BST : BT
 {
 public:
 	BST();
@@ -27,6 +45,7 @@ public:
 	void preorder();
 	void postorder();
 	bool isBalanced();
+	void createLinkedListAtEachDepth(std::vector<std::vector<int>>& lists);
 
 protected:
 	Node* insert(int data, Node* node, Node* parent);
@@ -34,9 +53,7 @@ protected:
 	void preorder(Node* node);
 	void postorder(Node* node);
 	bool isBalanced(Node* node, int& height);
-	 
-private: 
-	Node* root; 
+	void createLinkedListAtEachDepth(Node* node, std::vector<std::vector<int>>& lists, int level);
 };
 
 

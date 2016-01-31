@@ -1,12 +1,83 @@
 #include <iostream>
 #include <vector>
 #include <cstdlib>
+#include <queue>
+#include <climits>
 
 #include "bst.h"
 
 using namespace std; 
 
-BST::BST():root(nullptr)
+BT::BT():root(nullptr)
+{
+}
+
+BT::~BT()
+{
+	// Need to delete the nodes before we destruct.
+	if (root != nullptr)
+	{
+		queue<Node*> delete_queue; 
+
+		delete_queue.push(root); 
+
+		while (!delete_queue.empty())
+		{
+			Node* node = delete_queue.front(); 
+			delete_queue.pop(); 
+
+			if (node->left != nullptr) 
+			{
+				delete_queue.push(node->left); 
+			}
+			if (node->right != nullptr)
+			{
+				delete_queue.push(node->right); 
+			}
+
+			// cout << "Deleting node : " << node->data << endl; 
+
+			delete node; 
+			node = nullptr; 
+		}
+	}
+}
+
+void BT::setRoot(int data)
+{
+	root = new Node(data); 
+}
+
+Node* BT::getRoot()
+{
+	return root; 
+}
+
+bool BT::isBST(Node* node, int min, int max)
+{
+	if (node == nullptr)
+	{
+		return true; 
+	}
+
+	if (node->data < min || node->data > max)
+	{
+		return false; 
+	}
+	
+	if (!isBST(node->left, min, node->data) || !isBST(node->right, node->data, max))
+	{cout << "Node : " << node->data << " Returning false" << endl;
+		return false;
+	}   
+	return true; 
+}
+
+bool BT::isBST()
+{
+	return isBST(root, INT_MIN, INT_MAX); 
+}
+
+BST::BST()
 {
 }
 
@@ -57,7 +128,7 @@ void BST::inorder(Node* node)
 	}
 
 	inorder(node->left); 
-	cout << node->data << endl; 
+	cout << node->data << " "; 
 	inorder(node->right);
 }
 
@@ -73,7 +144,7 @@ void BST::preorder(Node* node)
 		return; 
 	}
 
-	cout << node->data << endl; 
+	cout << node->data << " "; 
 	preorder(node->left);
 	preorder(node->right);
 }
@@ -93,7 +164,7 @@ void BST::postorder(Node* node)
 	postorder(node->left);
 	postorder(node->right);
 
-	cout << node->data << endl; 
+	cout << node->data << " "; 
 }
 
 bool BST::isBalanced()
@@ -131,7 +202,36 @@ bool BST::isBalanced(Node* node, int& height)
 	}
 }
 
-void createBinTree(std::vector<int>& v, int start, int end, BST& bst)
+void BST::createLinkedListAtEachDepth(Node* node, vector<vector<int>>& lists, int level)
+{
+	if (node == nullptr)
+	{
+		return; 
+	}
+
+	if (lists.size() == level)
+	{
+		// This level has not been parsed. So create a new list and push into the lists. 
+		vector<int> list; 
+		list.push_back(node->data); 
+		lists.push_back(list); 
+	}
+	else 
+	{
+		lists[level].push_back(node->data); 
+	}
+
+	createLinkedListAtEachDepth(node->left, lists, level+1);
+	createLinkedListAtEachDepth(node->right, lists, level+1);
+}
+
+void BST::createLinkedListAtEachDepth(vector<vector<int>>& lists)
+{
+	int level = 0; 
+	createLinkedListAtEachDepth(root, lists, level); 
+}
+
+void createBalancedBinTree(std::vector<int>& v, int start, int end, BST& bst)
 {
 	if (start > end)
 	{
@@ -140,8 +240,13 @@ void createBinTree(std::vector<int>& v, int start, int end, BST& bst)
 
 	int mid = (start + end)/2; 
 	bst.insert(v[mid]); 
-	createBinTree(v, start, mid-1, bst); 
-	createBinTree(v, mid+1, end, bst);
+	createBalancedBinTree(v, start, mid-1, bst); 
+	createBalancedBinTree(v, mid+1, end, bst);
+}
+
+bool isBTaBST(BT& btree)
+{
+	return btree.isBST(); 
 }
 
 int main()
@@ -169,14 +274,17 @@ int main()
 
     cout << "BST Inorder" << endl; 
     bst.inorder();
+    cout << endl; 
 
     cout << "BST Preorder" << endl;
     bst.preorder();
+    cout << endl; 
 
     cout << "BST Postorder" << endl; 
     bst.postorder();
+    cout << endl; 
 
-    cout << "BST Balance computation" << endl; 
+    cout << "BST Balance computation -- BEGIN" << endl; 
     if (bst.isBalanced())
     {
     	cout << "BST is balanced" << endl; 
@@ -185,6 +293,7 @@ int main()
     {
     	cout << "BST is not balanced" << endl;
     }
+    cout << "BST Balance computation -- END" << endl;
 
     std::vector<int> v = {1,2,3,4,5,6,7,8,9,10};
 
@@ -194,12 +303,12 @@ int main()
     }
     cout << endl; 
 
-    BST btree;
-    createBinTree(v, 0, v.size() - 1, btree);
+    cout << "Problem to create balanced binary tree from a sorted array --- BEGIN" << endl ; 
+    BST bstree;
+    
+    createBalancedBinTree(v, 0, v.size() - 1, bstree);
 
-    btree.inorder(); 
-
-    if(btree.isBalanced())
+    if(bstree.isBalanced())
     {
     	cout << "Tree is balanced" << endl; 
     }
@@ -207,6 +316,46 @@ int main()
     {
     	cout << "Tree is not balanced" << endl; 
     }
+	cout << "Problem to create balanced binary tree from a sorted array --- END" << endl ; 
+
+    // Plbm 4.4 of cracking the coding interview : Create linked list of each depth.
+    cout << "Create Linked list at each level of Binary tree -- BEGIN" << endl;
+    vector<vector<int>> lists; 
+    bst.createLinkedListAtEachDepth(lists); 
+
+// Printing the lists.  
+    for (auto list : lists)
+    {
+    	for (auto i : list) 
+    	{
+    		cout << i << " ";
+    	}
+    	cout << endl; 
+    } 
+    cout << "Create Linked list at each level of Binary tree -- END" << endl ; 
+
+    cout << "Is binary tree a binarry search tree ? -- BEGIN" << endl; 
+
+    BT btree; 
+    btree.setRoot(10); 
+    Node* node = btree.getRoot(); 
+
+    node->left = new Node(5); 
+    node->right = new Node(15); 
+    node->left->right = new Node(7); 
+    node->left->left = new Node(3); 
+    node->right->right = new Node(17); 
+    node->right->left = new Node(19); 
+
+    if (isBTaBST(btree))
+    {
+    	cout << "This is BST" << endl ; 
+    } 
+    else 
+    {
+    	cout << "This is not a BST" << endl; 
+    }
+     cout << "Is binary tree a binarry search tree ? -- END" << endl; 
 
     return 0;
 }
