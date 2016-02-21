@@ -44,6 +44,27 @@ public:
 		return true; 
 	} 
 
+	int getElement(int index)
+	{
+		int i = 1; 
+
+		Node* node = head; 
+		while (node != nullptr && i < index)
+		{
+			node = node->next; 
+			i++; 
+		}
+
+		if (i == index)
+		{
+			return node->data; 
+		}
+		else 
+		{
+			return -1; 
+		}
+	}
+
 	bool deleteElement(int data)
 	{
 		if (head == nullptr)
@@ -233,6 +254,54 @@ private:
 };
 
 
+void addLists(LinkedList& num1, LinkedList& num2, LinkedList& result)
+{
+	cout << " Num 1: " ; 
+	num1.printList(); 
+
+	cout << " Num 2 : " ;
+	num2.printList();
+
+	int carry = 0; 
+	int i = 1; 
+	; 
+	int n1 = 0, n2 = 0;
+	int n = 0; 
+	while (((n1 = num1.getElement(i)) != -1) && ((n2 = num2.getElement(i)) != -1))
+	{
+		cout << "Iteration : " << i << " n1 : " << n1 << " n2 : " << n2 << endl; 
+		int sum = (n1 + n2 + carry)%10 ; 
+		carry = (n1 + n2 + carry)/10;
+
+		result.insertElement(sum); 
+		i++; 
+	}
+
+	cout << "i :" << i << endl;
+	if (num1.getElement(i) == -1)
+	{
+		cout << " Copying elements frm num2 " << endl;
+		while ((n = num2.getElement(i)) != -1)
+		{
+			n = (n + carry)%10; 
+			carry = (n + carry)/10;
+			result.insertElement(n);
+		}
+	}
+	else
+	{
+		cout << " Copying elements frm num1 " << endl;
+		while ((n = num1.getElement(i)) != -1)
+		{
+			n = (n + carry)%10; 
+			carry = (n + carry)/10;
+			result.insertElement(n);
+		}
+	}
+	return; 
+}
+
+
 int main()
 {
 	LinkedList list; 
@@ -277,5 +346,21 @@ int main()
 
 	cout << "13th from last : " << list.kthFromEnd(13) << endl;
 
+	cout << "11th element of list : " << list.getElement(11) << endl; 
+
+	LinkedList num1; 
+	LinkedList num2; 
+
+	num1.insertElement(5);
+	num1.insertElement(6);
+	num1.insertElement(3);
+
+	num2.insertElement(8);
+	num2.insertElement(4);
+	num2.insertElement(2);
+
+	LinkedList result;
+	addLists(num1, num2, result);
+	result.printList();
 	return 0; 
 }
