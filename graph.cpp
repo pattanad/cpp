@@ -3,6 +3,7 @@
 #include <set>
 #include <map>
 #include <queue>
+#include <climits>
 
 using namespace std;
 typedef pair<int, int> EDGE; 
@@ -16,7 +17,7 @@ enum STATE {
 class Node
 {
 public: 
-	Node(int data_): data(data_), visited(NOT_VISITED)
+	Node(int data_): data(data_), visited(NOT_VISITED), parent(nullptr), distance(0)
 	{
 	}
 
@@ -32,14 +33,18 @@ public:
 	{
 		if (this != &node)
 		{
-			data = node.data; 
+			data      = node.data; 
+			parent    = node.parent; 
+			distance  = node.distance; 
 			neighbors = node.neighbors; 
 		}
 		return *this;
 	}
 
 	int data;
-	int visited; 
+	int visited;
+	Node* parent;  
+	int distance; 
 	vector<Node*> neighbors; 
 };
 
@@ -100,7 +105,7 @@ public:
 	void DFS(Node* vertex)
 	{
 		vertex->visited = VISITED; 
-		cout << "NDOE Visited : " << vertex->data << endl; 
+		cout << "NODE Visited : " << vertex->data << endl; 
 
 		for (auto v : vertex->neighbors)
 		{
@@ -129,7 +134,9 @@ public:
 	{
 		for (auto vertex : vertices)
 		{
-			vertex->visited = NOT_VISITED; 
+			vertex->visited = NOT_VISITED;
+			vertex->distance = INT_MAX; 
+			vertex->parent = nullptr;  
 		}
 	}
 

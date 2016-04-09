@@ -8,7 +8,7 @@ using namespace std;
 
 int main() 
 {
-	int N = 10000; 
+	int N = 1000000; 
 	vector<int> primes;
 	stack<int> sprimes;  
 	bool A[N]; 
@@ -32,17 +32,8 @@ int main()
 	for (int i  = 0; i < N; i++) {
 		if (A[i]) {
 			primes.push_back(i);
-			sprimes.push(i);  
 		}
 	}
-
-	stack<int> sprimes2 = sprimes; 
-
-	while (!sprimes2.empty()) {
-		cout << sprimes2.top() << " "; 
-		sprimes2.pop();
-	}
-	cout << endl;
 
 	for (auto prime : primes) {
 		cout << prime << " " ; 
