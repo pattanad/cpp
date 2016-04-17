@@ -3,6 +3,15 @@
 
 using namespace std; 
 
+void printString(string& myString) 
+{
+	if (!myString.empty()) 
+	{
+		cout << myString << endl; 
+	}
+}
+
+
 int main ()
 {
 	/* this is a c++11 testcode*/
@@ -13,6 +22,16 @@ int main ()
 		cout << i << " ";
 	}
 	cout << endl; 
+
+	//int* p = (int *)0xffffabcd; 
+
+	//*p = 5; 
+
+	//cout << *p << endl; 
+
+	char* str = nullptr; 
+
+	printString(string(str)); 
 	return 0;
 }
 

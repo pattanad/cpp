@@ -48,7 +48,7 @@ public:
 		return stack[--top];
 	}
 
-private:
+
 
 	bool isEmpty()
 	{
@@ -59,7 +59,7 @@ private:
 	{
 		return (top == size_); 
 	}
-
+private:
 	unique_ptr<int[]> stack; 
 	int top;
 	int size_;  
@@ -118,7 +118,7 @@ public:
 		return stack[--top[stackNo-1]]; 
 	}
 
-private:
+
 	bool isEmpty(int stackNo)
 	{
 		return (top[stackNo-1] <= (stackNo-1)*size_/3);
@@ -129,10 +129,32 @@ private:
 		return (top[stackNo-1] == stackNo*size_/3);
 	}
 
+
+private:
+
 	int size_; 
 	unique_ptr<int[]> stack;
 	int top[3]; 
 };
+
+void insertAtBottom(Stack& s, int data) {
+	if (s.isEmpty()) {
+		s.push(data); 
+	}
+	else {
+		int tmp = s.pop(); 
+		insertAtBottom(s, data);
+		s.push(tmp);
+	} 
+}
+
+void reverse(Stack& s) {
+	if(!s.isEmpty()) {
+		int tmp = s.pop();
+		reverse(s); 
+		insertAtBottom(s, tmp);
+	}
+}
 
 // Implements a stack of integers.  The size of the stack should be given . 
 
@@ -162,6 +184,8 @@ int main ()
 		cout << "Pushing " << i << endl; 
 		s.push(i); 
 	}
+
+	reverse(s); 
 
 	s.push(10); 
 
